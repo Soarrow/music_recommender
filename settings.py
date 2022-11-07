@@ -1,6 +1,8 @@
-spotify_api_key = ""
+flask_secret_key = ""
+spotify_client_id = ""
+spotify_client_secret = ""
 
 try:
-from .private import *
+    from private import *
 except Exception:
-pass
+    pass
