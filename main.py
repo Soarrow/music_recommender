@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 app.secret_key = settings.flask_secret_key
 app.config['SESSION_COOKIE_NAME'] = 'User Session'
+TOKEN_INFO = 'token_info'
 
 @app.route('/')
 def login():
@@ -17,7 +18,12 @@ def login():
 
 @app.route('/redirect')
 def redirectPage():
-    return 'redirect'
+    sp_oauth = create_spotify_oauth(spotify_client_id=settings.spotify_client_id, spotify_client_secret=settings.spotify_client_secret)
+    session.clear()
+    code = request.args.get('code')
+    token_info = sp_oauth.get_access_token(code)
+    session[TOKEN_INFO] = token_info
+    return redirect(url_for('getPlaylists', _external=True))
 
 @app.route('/getPlaylists')
 def getPlaylists():
